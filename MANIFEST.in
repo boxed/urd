@@ -1,0 +1,14 @@
+include AUTHORS.rst
+include CONTRIBUTING.rst
+include HISTORY.rst
+include LICENSE
+include README.rst
+include requirements.txt
+exclude tests/*.*
+exclude urd.sqlite
+recursive-include urd *.*
+recursive-exclude urd *__tests.py
+recursive-exclude urd *.pyc
+recursive-exclude urd/snapshots *.*
+recursive-exclude urd testreport.xml
+prune *__tests.py

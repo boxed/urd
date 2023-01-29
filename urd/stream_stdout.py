@@ -61,11 +61,19 @@ class Streamer:
             self.thread.start()
             yield '<style>html { white-space: pre-wrap; } </style>'
             while not self.done:
-
                 try:
                     yield escape(printer.queue.get_nowait())
                 except Empty:
                     pass
+
+            self.thread.join()
+
+            # make sure last message is not lost
+            try:
+                while True:
+                    yield escape(printer.queue.get_nowait())
+            except Empty:
+                pass
 
 
 def stream_stdout(name, *args, **kwargs):

@@ -75,8 +75,7 @@ class Logger:
         self.flush()
         if self._prev_stdout and sys.stdout is self:
             sys.stdout = self._prev_stdout
-        self.cursor.close()
-        self.connection.close()
+        self.close()
 
     def __repr__(self):
         return f'<Logger log_id={self.log_id} task={self.task}>'

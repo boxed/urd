@@ -11,8 +11,8 @@ from urd.models import LogItem
 
 
 class Meta:
-    apps__scheduler_task__include = True
-    apps__scheduler_logitem__include = True
+    apps__urd_task__include = True
+    apps__urd_logitem__include = True
 
     parts__menu__sub_menu = dict(
         tasks=MenuItem(
@@ -23,7 +23,7 @@ class Meta:
         ),
     )
 
-    parts__list_scheduler_logitem = dict(
+    parts__list_urd_logitem = dict(
         auto__include=['log__execution_time', 'log__task', 'data'],
         columns=dict(
             edit__include=False,
@@ -35,7 +35,7 @@ class Meta:
         actions__create__include=False,
     )
 
-    parts__edit_scheduler_task__fields = dict(
+    parts__edit_urd_task__fields = dict(
         last_checked__include=False,
         shutdown_command__include=False,
         pid__editable=False,
@@ -48,11 +48,11 @@ class Meta:
         )
     )
 
-    parts__list_scheduler_task = dict(
+    parts__list_urd_task = dict(
         columns__disabled__bulk__include=True,
         columns__name__filter=dict(include=True, freetext=True),
         columns__function__filter=dict(include=True, freetext=True),
         columns__disabled__filter__include=True,
     )
 
-    parts__create_scheduler_task__fields__function = Field.choice(choices=lambda **_: [x.function for x in get_tasks()])
+    parts__create_urd_task__fields__function = Field.choice(choices=lambda **_: [x.function for x in get_tasks()])

@@ -1,4 +1,7 @@
-from django.http import StreamingHttpResponse
+from django.http import (
+    Http404,
+    StreamingHttpResponse,
+)
 from django.utils.translation import gettext
 from iommi import (
     Action,
@@ -11,7 +14,8 @@ from urd.stream_stdout import stream_stdout
 
 
 def tasks(request):
-    assert request.user.is_superuser
+    if not request.user.is_superuser:
+        raise Http404()
 
     return Table(
         title=gettext('Run tasks'),
@@ -27,7 +31,8 @@ def tasks(request):
 
 
 def task(request, name):
-    assert request.user.is_superuser
+    if not request.user.is_superuser:
+        raise Http404()
 
     def run_task(**_):
         return StreamingHttpResponse(stream_stdout(name))

@@ -52,10 +52,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'iommi',
     'urd',
     'tests',
 ]
 
+ROOT_URLCONF = 'tests.urls'
 
 DATETIME_FORMAT = r'\d\a\t\e\t\i\m\e\: N j, Y, P'
 DATE_FORMAT = r'\d\a\t\e\: N j, Y'

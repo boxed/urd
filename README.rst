@@ -15,22 +15,22 @@ Urd is a scheduler for Django projects. Some features:
 
 .. [#fastdisable]
 
-    It's vitally important to be able to stop a runaway process. With the `heartbeat`, and with the worker reading the database state before executing, it's easy and fast to disable a job.
+    It's vitally important to be able to stop a runaway process. With the ``heartbeat``, and with the worker reading the database state before executing, it's easy and fast to disable a job.
 
 
 Setup
 =====
 
-- Install urd `pip install urd`
-- Add `urd` to `INSTALLED_APPS`
-- Run `manage.py migrate`
-- Start the scheduler with `manage.py monitor`
+- Install urd ``pip install urd``
+- Add ``urd`` to ``INSTALLED_APPS``
+- Run ``manage.py migrate``
+- Start the scheduler with ``manage.py monitor``
 
 
 Usage
 =====
 
-- Define a `tasks.py` module in the app that should have tasks.
+- Define a ``tasks.py`` module in the app that should have tasks.
 - Create a function like this:
 
 .. code-block:: python
@@ -42,7 +42,7 @@ Usage
             do_some_task()
 
 
-Calling `heartbeat()` regularly is important to make the task cancellable in a timely manner.
+Calling ``heartbeat()`` regularly is important to make the task cancellable in a timely manner.
 
 Now define a task in the iommi admin. It will be enabled pretty much as soon as you save.
 

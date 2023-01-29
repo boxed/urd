@@ -58,4 +58,4 @@ compilemessages:
 	(cd examples && django-admin compilemessages)
 
 release:
-	rm -rf dist/ build/ && django-admin compilemessages --ignore=venv --ignore=.tox && python setup.py sdist bdist_wheel && twine upload dist/*
+	rm -rf dist/ build/ && python setup.py sdist bdist_wheel && twine upload dist/*

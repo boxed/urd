@@ -78,7 +78,7 @@ class ReleaseCheck(Command):
 setup(
     name='urd',
     version=read_version(),
-    description='urd is a high level framework built on django',
+    description='Urd is a scheduler for Django projects',
     long_description=readme,
     author='Anders Hovmöller',
     author_email='boxed@killingar.net',

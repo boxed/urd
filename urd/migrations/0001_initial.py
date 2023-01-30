@@ -27,8 +27,8 @@ class Migration(migrations.Migration):
             name='Task',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=1024)),
-                ('function', models.CharField(max_length=1024, unique=True)),
+                ('name', models.CharField(max_length=255)),
+                ('function', models.CharField(max_length=255, unique=True)),
                 ('pid', models.IntegerField(null=True)),
                 ('shutdown_command', models.DateTimeField(null=True)),
                 ('next_execution_time', models.DateTimeField(null=True)),

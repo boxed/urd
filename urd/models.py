@@ -25,8 +25,8 @@ from urd import (
 
 
 class Task(Model):
-    name = CharField(max_length=1024)
-    function = CharField(max_length=1024, unique=True)
+    name = CharField(max_length=255)
+    function = CharField(max_length=255, unique=True)
     pid = IntegerField(null=True)
     shutdown_command = DateTimeField(null=True)
     next_execution_time = DateTimeField(null=True)

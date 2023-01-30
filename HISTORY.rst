@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.0.3 (2023-01-28)
+~~~~~~~~~~~~~~~~~~
+
+- Cut length of name+function columns for mysql users (fixes #1)
+
 1.0.2 (2023-01-28)
 ~~~~~~~~~~~~~~~~~~
 

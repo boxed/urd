@@ -54,7 +54,7 @@ Urd ships with integration for the `iommi <https://docs.iommi.rocks>`_ admin.
 
 
 Why not cron/celery/django-q
-===================
+============================
 
 - Cron didn't work for me because I need to execute a function more often than once a minute
 - Cron also doesn't work for me because if you do once per minute, and the task takes two minutes, you get TWO executing processes of that task for a while. This can be disastrous for a few reasons, and can cause things to spiral out of control.

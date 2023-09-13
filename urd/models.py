@@ -128,3 +128,6 @@ class LogItem(Model):
 
     def __str__(self):
         return self.data
+
+    class Meta:
+        ordering = ('pk',)

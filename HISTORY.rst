@@ -1,10 +1,18 @@
 Changelog
 =========
 
+
+1.0.4 (2023-09-13)
+~~~~~~~~~~~~~~~~~~
+
+* Fixed ordering of `LogItem` by default. This will fix the ordering in the iommi admin.
+
+
 1.0.3 (2023-01-28)
 ~~~~~~~~~~~~~~~~~~
 
 - Cut length of name+function columns for mysql users (fixes #1)
+
 
 1.0.2 (2023-01-28)
 ~~~~~~~~~~~~~~~~~~

@@ -4,12 +4,13 @@ from importlib import import_module
 
 from django.conf import settings
 
-__version__ = '1.0.4'
+__version__ = '1.1.0'
 
 INTERVAL_WARNING_THRESHOLD = timedelta(seconds=5)
 KEEP_LOGS = 10
 SHUTDOWN_TIMEOUT = timedelta(seconds=10)
 SHUTDOWN_EXIT_CODE = 7
+SHUTDOWN_WAIT_FOR_NEXT_EXECUTION_EXIT_CODE = 8
 
 
 class ShuttingDown(Exception):

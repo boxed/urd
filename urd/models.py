@@ -36,7 +36,7 @@ class Task(Model):
     current_run_id = UUIDField(null=True)
     environment = CharField(max_length=255)
 
-    def calculate_next_execution_time(self):
+    def calculate_number_of_execution_slots_passed(self):
         assert self.interval.total_seconds() > 0
         count = 0
         if self.next_execution_time is None:

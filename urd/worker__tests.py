@@ -110,13 +110,13 @@ def test_calculate_next_execution_time():
             next_execution_time=timezone.now(),
             interval=timedelta(days=1),
         )
-        t.calculate_next_execution_time()
+        t.calculate_number_of_execution_slots_passed()
 
         assert t.time_to_next_execution() == timedelta(days=1)
 
         traveller.shift(timedelta(days=6))
 
-        assert t.calculate_next_execution_time() == 6
+        assert t.calculate_number_of_execution_slots_passed() == 6
 
 
 def test_error_on_invalid_function_name():
@@ -160,8 +160,18 @@ def test_wait_for_previous_shutdown_timeout(capsys):
         pid=123,
         shutdown_command=timezone.now() - SHUTDOWN_TIMEOUT + timedelta(seconds=0.1),
     )
-    t.calculate_next_execution_time()
+    t.calculate_number_of_execution_slots_passed()
 
     t.wait_for_previous_shutdown()
 
     assert capsys.readouterr().out == 'Shutdown timeout hit\n'
+
+
+def test_worker_shuts_down_if_long_time_to_next_slot():
+    t = Task.objects.create(
+        next_execution_time=timezone.now() + timedelta(seconds=40),
+        interval=timedelta(days=1),
+        pid=123,
+        shutdown_command=timezone.now() - SHUTDOWN_TIMEOUT + timedelta(seconds=0.1),
+    )
+    assert worker(t) == urd.SHUTDOWN_WAIT_FOR_NEXT_EXECUTION_EXIT_CODE

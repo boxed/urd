@@ -18,6 +18,7 @@ from urd import (
     INTERVAL_WARNING_THRESHOLD,
     KEEP_LOGS,
     SHUTDOWN_EXIT_CODE,
+    SHUTDOWN_WAIT_FOR_NEXT_EXECUTION_EXIT_CODE,
     ShuttingDown,
 )
 from urd.models import Task
@@ -86,7 +87,7 @@ def worker(task: Task):
 
     # SQLite will fail if you try to write to the database outside the current transaction, if you have one. So for sqlite we have to not use a transaction atomic block.
     atomic = transaction.atomic if 'sqlite' not in settings.DATABASES['default']['ENGINE'] else contextlib.nullcontext
-    
+
     setproctitle(f'{env} worker: {task.name}')
     task.refresh_from_db()
 
@@ -105,7 +106,7 @@ def worker(task: Task):
 
                 # noinspection PyBroadException
                 try:
-                    count = task.calculate_next_execution_time()
+                    count = task.calculate_number_of_execution_slots_passed()
                     assert count > 0
                     if count != 1 and task.interval > INTERVAL_WARNING_THRESHOLD:
                         print('WARNING', f'Missed {count - 1} execution windows')
@@ -124,6 +125,9 @@ def worker(task: Task):
                     sys.stdout = sys.__stdout__
                     log.exception('Scheduler worker crashed')
                     return SHUTDOWN_EXIT_CODE
+
+        if time_to_next_execution.total_seconds() > 20:
+            return SHUTDOWN_WAIT_FOR_NEXT_EXECUTION_EXIT_CODE
 
         to_sleep = (task.next_execution_time - timezone.now()).total_seconds()
         if to_sleep > 0:

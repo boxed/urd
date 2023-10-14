@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.1.0 (2023-10-14)
+~~~~~~~~~~~~~~~~~~
+
+* Workers shut down if they have > 20s to next execution slot, and start up if there is < 10s to their next execution slot. This can save a lot of memory for task that don't run very often.
+
 
 1.0.4 (2023-09-13)
 ~~~~~~~~~~~~~~~~~~

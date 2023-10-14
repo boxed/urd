@@ -41,7 +41,7 @@ class Command(BaseCommand):
                 # Create processes for all tasks that need it
                 current_tasks = set(Task.objects.filter(disabled=False, environment=env))
                 for task in current_tasks:
-                    if task not in process_by_task:
+                    if task not in process_by_task and task.time_to_next_execution().total_seconds() < 10:
                         process_by_task[task] = subprocess.Popen([sys.executable, 'manage.py', 'worker', str(task.pk)])
                         print('Starting', task)
 

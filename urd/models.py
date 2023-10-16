@@ -1,9 +1,12 @@
+import contextlib
 import os
 from datetime import timedelta
 from importlib import import_module
 from time import sleep
 from uuid import uuid4
 
+from django.conf import settings
+from django.db import transaction
 from django.db.models import (
     BooleanField,
     CASCADE,
@@ -80,7 +83,13 @@ class Task(Model):
                 sleep(1)
                 raise ShuttingDown('Failed to execute function')
 
-        self._function(heartbeat=lambda: self.heartbeat())
+        # SQLite will fail if you try to write to the database outside the current transaction, if you have one. So for sqlite we have to not use a transaction atomic block.
+        atomic = transaction.atomic if 'sqlite' not in settings.DATABASES['default']['ENGINE'] else contextlib.nullcontext
+        if not getattr(self._function, '_use_transaction', True):
+            atomic = contextlib.nullcontext
+
+        with atomic():
+            return self._function(heartbeat=lambda: self.heartbeat())
 
     def wait_for_previous_shutdown(self):
         while self.pid is not None and self.shutdown_command is not None and timezone.now() < (self.shutdown_command + SHUTDOWN_TIMEOUT):

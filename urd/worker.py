@@ -1,15 +1,11 @@
-import contextlib
+import sys
 import sys
 import traceback
 from logging import getLogger
 from time import sleep
 from uuid import uuid4
 
-from django.conf import settings
-from django.db import (
-    connections,
-    transaction,
-)
+from django.db import connections
 from django.utils import timezone
 from setproctitle import setproctitle
 
@@ -85,9 +81,6 @@ class Logger:
 def worker(task: Task):
     env = get_env()
 
-    # SQLite will fail if you try to write to the database outside the current transaction, if you have one. So for sqlite we have to not use a transaction atomic block.
-    atomic = transaction.atomic if 'sqlite' not in settings.DATABASES['default']['ENGINE'] else contextlib.nullcontext
-
     setproctitle(f'{env} worker: {task.name}')
     task.refresh_from_db()
 
@@ -112,8 +105,7 @@ def worker(task: Task):
                         print('WARNING', f'Missed {count - 1} execution windows')
 
                     setproctitle(f'{env} worker: {task.name}. Executing since {timezone.now()}')
-                    with atomic():
-                        task.execute()
+                    task.execute()
                     setproctitle(f'{env} worker: {task.name}')
                 except ShuttingDown:
                     return SHUTDOWN_EXIT_CODE

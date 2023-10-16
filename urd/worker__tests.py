@@ -175,3 +175,27 @@ def test_worker_shuts_down_if_long_time_to_next_slot():
         shutdown_command=timezone.now() - SHUTDOWN_TIMEOUT + timedelta(seconds=0.1),
     )
     assert worker(t) == urd.SHUTDOWN_WAIT_FOR_NEXT_EXECUTION_EXIT_CODE
+
+
+@urd.schedulable_task
+def worker_with_use_transaction_false(heartbeat):
+    return 'done'
+
+
+def test_decorator_1():
+    t = Task(
+        function='urd.worker__tests.worker_with_use_transaction_false',
+    )
+    assert t.execute() == 'done'
+
+
+@urd.schedulable_task(use_transaction=False)
+def worker_with_use_transaction_false(heartbeat):
+    return 'done'
+
+
+def test_decorator_2():
+    t = Task(
+        function='urd.worker__tests.worker_with_use_transaction_false',
+    )
+    assert t.execute() == 'done'

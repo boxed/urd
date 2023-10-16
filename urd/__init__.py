@@ -4,7 +4,7 @@ from importlib import import_module
 
 from django.conf import settings
 
-__version__ = '1.1.0'
+__version__ = '1.2.0'
 
 INTERVAL_WARNING_THRESHOLD = timedelta(seconds=5)
 KEEP_LOGS = 10
@@ -28,9 +28,17 @@ def get_env():
     return getattr(settings, 'ENV', 'unknown ENV')
 
 
-def schedulable_task(f):
-    f._is_task = True
-    return f
+def schedulable_task(*function, use_transaction=True):
+    def decorator(f):
+        f._is_task = True
+        f._use_transaction = use_transaction
+        return f
+
+    if function:
+        assert len(function) == 1
+        return decorator(function[0])
+
+    return decorator
 
 
 def get_tasks():

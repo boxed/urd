@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.2.0 (2023-10-16)
+~~~~~~~~~~~~~~~~~~
+
+* `@schedulable_task` now takes an optional keyword argument `use_transaction` that you can use to turn off the default transaction around a task. This is useful for tasks that work with a queue where each items should be handled by a transaction.
+
 1.1.0 (2023-10-14)
 ~~~~~~~~~~~~~~~~~~
 

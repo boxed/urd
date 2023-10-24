@@ -89,6 +89,7 @@ class Task(Model):
             atomic = contextlib.nullcontext
 
         with atomic():
+            self.heartbeat()
             return self._function(heartbeat=lambda: self.heartbeat())
 
     def wait_for_previous_shutdown(self):

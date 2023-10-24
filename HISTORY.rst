@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.2.3 (2023-10-24)
+~~~~~~~~~~~~~~~~~~
+
+* heartbeat warning is still printed incorrectly :(
+
+
 1.2.2 (2023-10-24)
 ~~~~~~~~~~~~~~~~~~
 

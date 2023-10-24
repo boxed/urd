@@ -88,6 +88,9 @@ def worker(task: Task):
     task.start()
 
     while True:
+        task.last_checked = timezone.now()
+        task.save(update_fields=['last_checked'])
+
         try:
             task.heartbeat()
         except ShuttingDown:

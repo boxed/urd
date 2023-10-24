@@ -55,7 +55,7 @@ class Task(Model):
 
     def heartbeat(self):
         if self.last_checked is not None and (timezone.now() - self.last_checked) > SHUTDOWN_TIMEOUT:
-            print('WARNING', 'heartbeat not called often enough')
+            print('WARNING', 'heartbeat not called often enough for', self.name)
         if self.last_checked is None or (timezone.now() - self.last_checked) > timedelta(seconds=1):
             self.check_lock()
             self.last_checked = timezone.now()

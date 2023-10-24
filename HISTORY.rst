@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.2.1 (2023-10-24)
+~~~~~~~~~~~~~~~~~~
+
+* heartbeat logging warning improved to give the name of the task
+
 1.2.0 (2023-10-16)
 ~~~~~~~~~~~~~~~~~~
 

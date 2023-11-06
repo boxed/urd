@@ -183,8 +183,10 @@ def worker_with_use_transaction_false(heartbeat):
 
 
 def test_decorator_1():
-    t = Task(
+    t = Task.objects.create(
         function='urd.worker__tests.worker_with_use_transaction_false',
+        interval=timedelta(days=1),
+        pid=os.getpid(),
     )
     assert t.execute() == 'done'
 
@@ -195,7 +197,9 @@ def worker_with_use_transaction_false(heartbeat):
 
 
 def test_decorator_2():
-    t = Task(
+    t = Task.objects.create(
         function='urd.worker__tests.worker_with_use_transaction_false',
+        interval=timedelta(days=1),
+        pid=os.getpid(),
     )
     assert t.execute() == 'done'

@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.2.4 (2023-11-06)
+~~~~~~~~~~~~~~~~~~
+
+* `function` on `Task` should not be unique, as that prevents your from scheduling a specific job on more than one environment.
+
 1.2.3 (2023-10-24)
 ~~~~~~~~~~~~~~~~~~
 

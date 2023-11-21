@@ -4,7 +4,7 @@ from importlib import import_module
 
 from django.conf import settings
 
-__version__ = '1.2.4'
+__version__ = '1.3.0'
 
 INTERVAL_WARNING_THRESHOLD = timedelta(seconds=5)
 KEEP_LOGS = 10

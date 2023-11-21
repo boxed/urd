@@ -14,7 +14,7 @@ class Command(BaseCommand):
     help = 'Scheduler monitor. This task will start the workers and make sure they are all running.'
 
     def handle(self, *args, **options):
-        env = get_env()
+        env = get_env().lower()
         print('Monitor started')
         setproctitle(f'{env} monitor')
 
@@ -39,7 +39,8 @@ class Command(BaseCommand):
                 }
 
                 # Create processes for all tasks that need it
-                current_tasks = set(Task.objects.filter(disabled=False, environment=env))
+                current_tasks = {x for x in Task.objects.filter(disabled=False) if env in map(str.strip, x.environment.lower().split(','))}
+
                 for task in current_tasks:
                     if task not in process_by_task and task.time_to_next_execution().total_seconds() < 10:
                         process_by_task[task] = subprocess.Popen([sys.executable, 'manage.py', 'worker', str(task.pk)])

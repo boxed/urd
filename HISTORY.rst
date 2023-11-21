@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.3.0 (2023-11-21)
+~~~~~~~~~~~~~~~~~~
+
+* You can now specify multiple environments to run a task in with a comma separated list in the environment field
+
 1.2.4 (2023-11-06)
 ~~~~~~~~~~~~~~~~~~
 

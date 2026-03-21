@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.3.1 (2026-03-21)
+~~~~~~~~~~~~~~~~~~
+
+Close connections when waiting for next execution slot
+
 1.3.0 (2023-11-21)
 ~~~~~~~~~~~~~~~~~~
 

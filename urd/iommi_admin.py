@@ -12,7 +12,6 @@ from urd.models import LogItem
 
 class Meta:
     apps__urd_task__include = True
-    apps__urd_logitem__include = True
 
     parts__menu__sub_menu = dict(
         tasks=MenuItem(

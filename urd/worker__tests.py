@@ -177,6 +177,36 @@ def test_worker_shuts_down_if_long_time_to_next_slot():
     assert worker(t) == urd.SHUTDOWN_WAIT_FOR_NEXT_EXECUTION_EXIT_CODE
 
 
+def test_worker_closes_connections_before_idle_exit():
+    t = Task.objects.create(
+        next_execution_time=timezone.now() + timedelta(seconds=40),
+        interval=timedelta(days=1),
+        pid=123,
+        shutdown_command=timezone.now() - SHUTDOWN_TIMEOUT + timedelta(seconds=0.1),
+    )
+    with mock.patch('urd.worker.close_old_connections') as mock_close:
+        assert worker(t) == urd.SHUTDOWN_WAIT_FOR_NEXT_EXECUTION_EXIT_CODE
+        assert mock_close.call_count >= 1
+
+
+def function_that_shuts_down(heartbeat):
+    heartbeat()
+    raise ShuttingDown()
+
+
+def test_worker_closes_connections_before_sleep():
+    t = Task.objects.create(
+        name='test',
+        function='urd.worker__tests.function_that_shuts_down',
+        interval=timedelta(seconds=5),
+        next_execution_time=timezone.now() + timedelta(seconds=3),
+    )
+    with mock.patch('urd.worker.close_old_connections') as mock_close, \
+         mock.patch('urd.worker.sleep'):
+        worker(t)
+        assert mock_close.call_count >= 1
+
+
 @urd.schedulable_task
 def worker_with_use_transaction_false(heartbeat):
     return 'done'

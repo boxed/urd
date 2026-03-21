@@ -6,6 +6,7 @@ from time import sleep
 from uuid import uuid4
 
 from django.db import connections
+from django.db import close_old_connections
 from django.utils import timezone
 from setproctitle import setproctitle
 
@@ -122,8 +123,10 @@ def worker(task: Task):
                     return SHUTDOWN_EXIT_CODE
 
         if time_to_next_execution.total_seconds() > 20:
+            close_old_connections()
             return SHUTDOWN_WAIT_FOR_NEXT_EXECUTION_EXIT_CODE
 
         to_sleep = (task.next_execution_time - timezone.now()).total_seconds()
         if to_sleep > 0:
+            close_old_connections()
             sleep(to_sleep)

@@ -4,6 +4,7 @@ import sys
 from time import sleep
 
 from django.core.management.base import BaseCommand
+from django.db import close_old_connections
 from setproctitle import setproctitle
 
 from urd import get_env
@@ -53,6 +54,7 @@ class Command(BaseCommand):
                         process_by_task[task].terminate()
                         process_by_task[task] = None
 
+                close_old_connections()
                 sleep(0.1)
         except KeyboardInterrupt:
             pass

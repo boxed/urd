@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.3.2 (2026-03-27)
+~~~~~~~~~~~~~~~~~~
+
+Interval changes are now picked up by running workers without requiring a restart
+
 1.3.1 (2026-03-21)
 ~~~~~~~~~~~~~~~~~~
 

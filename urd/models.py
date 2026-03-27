@@ -73,6 +73,10 @@ class Task(Model):
             t.save(update_fields=['pid', 'shutdown_command', 'current_run_id'])
             raise ShuttingDown('Got shutdown command')
 
+        if t.interval != self.interval:
+            self.interval = t.interval
+            self.next_execution_time = t.next_execution_time
+
     def execute(self):
         if not hasattr(self, '_function'):
             m, _, f = self.function.rpartition('.')

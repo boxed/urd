@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.4.0 (unreleased)
+~~~~~~~~~~~~~~~~~~
+
+* The monitor now forks its workers instead of starting a new interpreter for each. Workers share the monitor's imported modules copy-on-write (the monitor imports every app's ``tasks`` module and calls ``gc.freeze()`` before forking), so a worker no longer pays the memory and startup time of importing the whole project. On a large project this took a worker from about 280 MB to a few MB of private memory, and removed several seconds of startup.
+
+* The monitor must stay single-threaded, as forking a process with threads is unsafe. Python warns when that happens.
+
 1.3.2 (2026-03-27)
 ~~~~~~~~~~~~~~~~~~
 

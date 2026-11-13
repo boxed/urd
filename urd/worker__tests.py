@@ -12,6 +12,7 @@ import urd
 from urd import (
     KEEP_LOGS,
     SHUTDOWN_EXIT_CODE,
+    SHUTDOWN_WAIT_FOR_NEXT_EXECUTION_EXIT_CODE,
     SHUTDOWN_TIMEOUT,
     ShuttingDown,
 )
@@ -233,3 +234,23 @@ def test_decorator_2():
         pid=os.getpid(),
     )
     assert t.execute() == 'done'
+
+
+def function_to_run_once(heartbeat):
+    heartbeat()
+
+
+def test_a_worker_exits_after_a_run_when_the_next_one_is_far_off():
+    # The monitor forks a new worker shortly before the next run, so a task that runs seldom holds no memory in between.
+    task = Task.objects.create(
+        name='test',
+        function='urd.worker__tests.function_to_run_once',
+        interval=timedelta(hours=1),
+        next_execution_time=now(),
+    )
+
+    def fail_to_sleep(seconds):
+        raise AssertionError(f'the worker slept {seconds} s instead of exiting')
+
+    with mock.patch.object(urd.worker, 'sleep', new=fail_to_sleep):
+        assert worker(task) == SHUTDOWN_WAIT_FOR_NEXT_EXECUTION_EXIT_CODE

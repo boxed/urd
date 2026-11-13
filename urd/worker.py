@@ -122,7 +122,8 @@ def worker(task: Task):
                     log.exception('Scheduler worker crashed')
                     return SHUTDOWN_EXIT_CODE
 
-        if time_to_next_execution.total_seconds() > 20:
+        # Asked again: a run moves the next execution time on.
+        if task.time_to_next_execution().total_seconds() > 20:
             close_old_connections()
             return SHUTDOWN_WAIT_FOR_NEXT_EXECUTION_EXIT_CODE
 

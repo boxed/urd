@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.5.1 (unreleased)
+~~~~~~~~~~~~~~~~~~
+
+* Fixed: a worker never shut down after a run to wait for its next one, as it decided by the time to the next run from before the run, when that run was due. It slept until the next run instead, so every task that had run once kept its worker, and the memory the run left it with, for good.
+
 1.5.0 (2026-11-13)
 ~~~~~~~~~~~~~~~~~~
 

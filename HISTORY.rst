@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.5.0 (unreleased)
+~~~~~~~~~~~~~~~~~~
+
+* New setting ``URD_BEFORE_FORK``: the dotted path of a function the monitor calls before it freezes and forks its workers, to load what the tasks would otherwise each load after the fork.
+
 1.4.0 (2026-11-11)
 ~~~~~~~~~~~~~~~~~~
 

@@ -2,11 +2,13 @@ import gc
 import signal
 from time import sleep
 
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db import (
     close_old_connections,
     connections,
 )
+from django.utils.module_loading import import_string
 from setproctitle import setproctitle
 
 from urd import (
@@ -22,6 +24,23 @@ def start_worker(task):
     # The child must open its own database connections, never use the parent's sockets.
     connections.close_all()
     return ForkedProcess(target=lambda: worker(task))
+
+
+def prepare_for_forking():
+    """Workers are forked from the monitor, so import everything they need once, here, and freeze
+    it: the workers then share these pages instead of each importing the project anew. Without the
+    freeze, the workers' garbage collectors write to every inherited object, and the pages are
+    unshared.
+
+    `settings.URD_BEFORE_FORK`, the dotted path of a function, loads what the tasks would
+    otherwise load lazily, after the fork, each worker its own copy: libraries a task imports
+    inside a function, caches it fills on first use."""
+    get_tasks()
+    before_fork = getattr(settings, 'URD_BEFORE_FORK', None)
+    if before_fork:
+        import_string(before_fork)()
+    gc.collect()
+    gc.freeze()
 
 
 class Command(BaseCommand):
@@ -41,13 +60,7 @@ class Command(BaseCommand):
 
         signal.signal(signal.SIGTERM, sigterm_handler)
 
-        # Workers are forked from this process, so import everything they need once, here, and
-        # freeze it: the workers then share these pages instead of each importing the project
-        # anew. Without the freeze, the workers' garbage collectors write to every inherited
-        # object, and the pages are unshared.
-        get_tasks()
-        gc.collect()
-        gc.freeze()
+        prepare_for_forking()
 
         process_by_task = {}
 

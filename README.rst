@@ -47,6 +47,18 @@ Calling ``heartbeat()`` regularly is important to make the task cancellable in a
 Now define a task in the iommi admin. It will be enabled pretty much as soon as you save.
 
 
+Memory
+======
+
+The monitor imports every app's ``tasks`` module, freezes it with ``gc.freeze()``, and forks the workers from itself, so the workers share those modules instead of each having its own copy. What a task loads only when it runs, like a library imported inside a function or a cache filled on first use, each worker loads again after the fork. Load those in the monitor instead, with the dotted path of a function in your settings:
+
+.. code-block:: python
+
+    URD_BEFORE_FORK = 'myproject.preload.load_before_fork'
+
+The monitor calls it once, before it freezes and forks. It must not start threads, as forking a process with threads is unsafe.
+
+
 Administration
 ==============
 

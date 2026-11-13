@@ -1,0 +1,44 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "urd"
+description = "Urd is a scheduler for Django projects"
+readme = "README.rst"
+authors = [{ name = "Anders Hovmöller", email = "boxed@killingar.net" }]
+license = { text = "BSD" }
+requires-python = ">=3.8"
+keywords = ["urd"]
+dependencies = ["Django>=3.2", "setproctitle"]
+dynamic = ["version"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+]
+
+[project.urls]
+Homepage = "https://github.com/boxed/urd"
+
+[dependency-groups]
+dev = ["hammett", "pytest-django"]
+
+[tool.hatch.version]
+path = "urd/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["urd"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "urd", "docs"]
+addopts = "--strict-markers -r fEsxXw --no-migrations"
+DJANGO_SETTINGS_MODULE = "tests.settings"
+python_files = ["test_*.py", "helpers.py", "*__tests.py"]
+markers = ["django_db"]
+
+[tool.hatch.build.targets.sdist]
+include = ["urd", "AUTHORS.rst", "CONTRIBUTING.rst", "HISTORY.rst", "LICENSE", "README.rst"]
+exclude = ["*__tests.py"]

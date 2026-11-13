@@ -33,16 +33,17 @@ clean-docs:
 test:
 	pytest
 
-dist: clean
-	python setup.py sdist
-	python setup.py bdist_wheel
+dist: clean-build
+	uv build
 	ls -l dist
 
+VERSION = $(shell sed -n "s/^__version__ = '\(.*\)'/\1/p" urd/__init__.py)
+
 tag:
-	python setup.py tag
+	git tag --annotate $(VERSION) --message "Version $(VERSION)"
 
 release-check:
-	python setup.py release_check
+	@test "$$(git describe HEAD)" = "$(VERSION)" || (echo "Missing $(VERSION) tag on release" && exit 1)
 
 venv:
 	python -m venv venv
@@ -58,4 +59,4 @@ compilemessages:
 	(cd examples && django-admin compilemessages)
 
 release:
-	rm -rf dist/ build/ && python setup.py sdist bdist_wheel && twine upload dist/*
+	rm -rf dist/ build/ && uv build && twine upload dist/*
